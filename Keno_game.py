@@ -11,12 +11,18 @@ class Keno:
 
     # Метод для ввода ставки
     def to_bet(self) -> float:
-        bet = input(f'Делайте ставку!(мин: {self.__MIN_BET}, макс: {self.__MAX_BET}) -> ')
 
         # Проверка на валидность
-        while not bet.replace('.', '').isnumeric() or not self.__MIN_BET <= float(bet) <= self.__MAX_BET:
-            print(f'Ставка должна быть от {self.__MIN_BET} до {self.__MAX_BET}')
+        while True:
             bet = input(f'Делайте ставку!(мин: {self.__MIN_BET}, макс: {self.__MAX_BET}) -> ')
+            if not bet.replace('.', '').isnumeric():
+                print("Введённые данные не являются числом! Повторите попытку")
+            elif float(bet) < self.__MIN_BET:
+                print(f"Введённое число не должно быть меньше {self.__MIN_BET}")
+            elif float(bet) > self.__MAX_BET:
+                print(f"Введённое число не должно быть больше {self.__MAX_BET}")
+            else:
+                break
         self.__money -= float(bet)
         return float(bet)
 
@@ -31,13 +37,21 @@ class Keno:
         # Список введённых чисел
         entered_nums = []
         for i in range(self.__count_of_guess):
-            a = input('Введите ваше число(от 1 до 80 включительно) -> ')
-
             # Проверка на валидность
-            while not a.isnumeric() or int(a) in entered_nums or int(a) < 1 or int(a) > 80:
-                a = input(
-                    "Введены данные неправильного формата. Пж повторите попытку.Введите ваше число(от 1 до 80 включительно) -> ")
-            entered_nums.append(int(a))
+            while True:
+                elem = input('Введите ваше число(от 1 до 80 включительно) -> ')
+                if not elem.isnumeric():
+                    print("Введённые данные не являются числом! Повторите попытку")
+                elif int(elem) < 1:
+                    print("Введённое число не должно быть меньше 1")
+                elif int(elem) > 80:
+                    print("Введённое число не должно быть больше 80")
+                elif int(elem) in entered_nums:
+                    print("Введённое число уже содержится в списке")
+                else:
+                    break
+            entered_nums.append(int(elem))
+            print(f'Текущие введённые числа: {entered_nums}')
         return entered_nums
 
     @staticmethod
@@ -102,7 +116,15 @@ class Keno:
 if __name__ == '__main__':
 
     kn = Keno()
-    answer = 'Y'
-    while answer == 'Y' and kn.money > 0:
-        kn.start_game()
+    kn.start_game()
+    while True:
+        if kn.money < 0:
+            print('Недостаточно денег')
+            break
         answer = input('Хотите продолжить игру?(Y/N) -> ').upper()
+        if answer == 'N':
+            break
+        elif answer == 'Y':
+            kn.start_game()
+        else:
+            print('Неизвестная комманда. Повторите попытку')
