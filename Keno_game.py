@@ -10,7 +10,7 @@ class Keno:
     __count_of_guess = 10
 
     # Метод для ввода ставки
-    def to_bet(self) -> float:
+    def __to_bet(self) -> float:
 
         # Проверка на валидность
         while True:
@@ -28,12 +28,12 @@ class Keno:
 
     @classmethod
     # Метод для генерации рандомных чисел
-    def get_random_nums(cls) -> list[int]:
+    def __get_random_nums(cls) -> list[int]:
         list_of_random_nums = sample(cls.__list_of_nums, 20)
         return list_of_random_nums
 
     # Метод для ввода чисел
-    def entering_nums(self) -> list[int]:
+    def __entering_nums(self) -> list[int]:
         # Список введённых чисел
         entered_nums = []
         for i in range(self.__count_of_guess):
@@ -56,13 +56,13 @@ class Keno:
 
     @staticmethod
     # Метод для поиска совпадений
-    def matching_choices(random_nums: list, guessed_nums: list) -> list[int]:
+    def __matching_choices(random_nums: list, guessed_nums: list) -> list[int]:
         matches = list(set(random_nums) & set(guessed_nums))
         return matches
 
     @staticmethod
     # Метод для определения вознаграждения
-    def award(bet, matches) -> int:
+    def __award(bet, matches) -> int:
         # Количество совпадений
         amount_of_matches = len(matches)
         match amount_of_matches:
@@ -91,23 +91,23 @@ class Keno:
         print('Welcome to game')
 
         # Ставка
-        bet = self.to_bet()
+        bet = self.__to_bet()
         print(f'Ваша ставка: {bet}')
 
         # Введённые числа
-        entered_nums = self.entering_nums()
+        entered_nums = self.__entering_nums()
         print(f'Введённые числа: {entered_nums}')
 
         # Рандомные числа
-        nums = self.get_random_nums()
+        nums = self.__get_random_nums()
         print(f'Все рандомные числа: {nums}')
 
         # Совпадения
-        matched = self.matching_choices(nums, entered_nums)
+        matched = self.__matching_choices(nums, entered_nums)
         print(f'Угаданные числа: {matched}')
 
         # Выигрыш
-        win = self.award(bet, matched)
+        win = self.__award(bet, matched)
         self.__money += win
         print(f'Ваш выигрыш состовляет: {win}')
         print(f'Ваш текущий баланс: {self.__money}')
